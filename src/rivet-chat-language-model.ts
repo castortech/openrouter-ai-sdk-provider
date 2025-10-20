@@ -641,6 +641,24 @@ function mapRivetEventToOpenAIChunk(
         ],
         usage: undefined,
       }
+    case 'nodeFinish':  //Note that original has !hasDelta that was set via 'partialOutput'
+      return {
+        id,
+        created: Math.floor(Date.now() / 1000),
+        model,
+        choices: [
+          {
+            delta: {
+              role: 'assistant',
+              content: eventData.delta ?? '',
+              tool_calls: undefined,
+            },
+            finish_reason: null,
+            index: 0,
+          },
+        ],
+        usage: undefined,
+      }
     case 'done':
       return {
         id,
