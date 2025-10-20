@@ -642,6 +642,18 @@ function mapRivetEventToOpenAIChunk(
         usage: undefined,
       }
     case 'nodeFinish':  //Note that original has !hasDelta that was set via 'partialOutput'
+			const rawContent =
+				eventData.outputs?.response?.value ??
+				eventData.outputs?.valueOutput?.value ??
+				undefined
+
+			const delta =
+				typeof rawContent === 'string'
+					? rawContent
+					: rawContent !== undefined
+						? JSON.stringify(rawContent)
+						: undefined
+
       return {
         id,
         created: Math.floor(Date.now() / 1000),
@@ -650,14 +662,14 @@ function mapRivetEventToOpenAIChunk(
           {
             delta: {
               role: 'assistant',
-              content: eventData.delta ?? '',
+              content: delta ?? '',
               tool_calls: undefined,
             },
             finish_reason: null,
             index: 0,
           },
         ],
-        usage: undefined,
+        usage: toOpenAIUsage(eventData?.output?.usages?.value?.[0]?.value),
       }
     case 'done':
       return {
@@ -679,6 +691,7 @@ function mapRivetEventToOpenAIChunk(
       }
     default:
       // ignore unhandled events
+			console.log(`failling on default for type:${printObject(eventType)}`)
       return {
         id,
         created: Math.floor(Date.now() / 1000),
