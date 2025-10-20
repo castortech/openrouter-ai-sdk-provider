@@ -17,7 +17,9 @@
   },
   "workbench.colorCustomizations": {
     "titleBar.activeForeground": "#eee",
-    "titleBar.activeBackground": "#f4f" // Change this color!
+    "titleBar.activeBackground": "#f4f", // Change this color!
+	  "tab.activeBackground": "#636464",
+  	"tab.inactiveBackground": "#181c23"
   },
   "editor.formatOnSave": true,
   "files.insertFinalNewline": true,

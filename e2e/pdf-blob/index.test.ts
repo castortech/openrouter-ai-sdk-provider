@@ -3,19 +3,19 @@ import type { ModelMessage } from 'ai';
 import { generateText } from 'ai';
 import { writeFile } from 'fs/promises';
 import { test, vi } from 'vitest';
-import { createOpenRouter } from '@/src';
+import { createRivet } from '@/src';
 
 vi.setConfig({
   testTimeout: 42_000,
 });
 
 test('sending pdf base64 blob', async () => {
-  const openrouter = createOpenRouter({
-    apiKey: process.env.OPENROUTER_API_KEY,
-    baseUrl: `${process.env.OPENROUTER_API_BASE}/api/v1`,
+  const rivet = createRivet({
+    apiKey: process.env.RIVET_API_KEY,
+    baseURL: `${process.env.RIVET_API_BASE}/api/v1`,
   });
 
-  const model = openrouter('anthropic/claude-sonnet-4', {
+  const model = rivet('anthropic/claude-sonnet-4', {
     usage: {
       include: true,
     },
