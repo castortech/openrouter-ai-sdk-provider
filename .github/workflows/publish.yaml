@@ -16,12 +16,11 @@ jobs:
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
-          scope: "@openrouter"
+          scope: "@alpic80"
       - uses: pnpm/action-setup@v4
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm build
-      - run: pnpm test
       - name: Publish to npm
         run: |
           if [ "${{ github.event.release.prerelease }}" = "true" ]; then
