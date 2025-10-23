@@ -7,7 +7,7 @@ import type { ResponseHandler } from '@ai-sdk/provider-utils';
 import { getRuntimeEnvironmentUserAgent } from '@ai-sdk/provider-utils';
 import { withUserAgentSuffix } from '@ai-sdk/provider-utils';
 import { VERSION } from './version';
-import { printObject } from './utils';
+import { debugLog, printObject } from './utils';
 
 // use function to allow for mocking in tests:
 const getOriginalFetch = () => globalThis.fetch;
@@ -251,7 +251,7 @@ export function parseJsonEventStream<T>({
 		.pipeThrough(new TransformStream<Uint8Array, string>({
 			transform(chunk, controller) {
 				const decoded = new TextDecoder().decode(chunk)
-				console.log(`Decoded:${printObject(decoded)}`)
+				debugLog(`Decoded:${printObject(decoded)}`)
 				controller.enqueue(decoded)
 			}
 		}))
@@ -264,7 +264,7 @@ export function parseJsonEventStream<T>({
             return;
           }
 
-					console.log(`Data to schema:${printObject(data)}`)
+					debugLog(`Data to schema:${printObject(data)}`)
           controller.enqueue(await safeParseJSON({ text: data, schema }));
         },
       }),

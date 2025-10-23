@@ -26,7 +26,7 @@ import {
 } from './rivet-chat-options';
 import { rivetFailedResponseHandler } from './rivet-error';
 import { prepareTools } from './rivet-prepare-tools';
-import { printObject } from './utils';
+import { debugLog, printObject } from './utils';
 import { createEventSourceResponseHandler, postJsonToApi } from './post-to-api';
 import type { RivetUsage } from './rivet-chat-prompt';
 
@@ -84,7 +84,7 @@ export class RivetChatLanguageModel implements LanguageModelV2 {
 			chatConfig: {}
 		}
 
-		console.log(`providerOptions:${printObject(providerOptions)}`)
+		debugLog(`providerOptions:${printObject(providerOptions)}`)
 
     const options = (await parseProviderOptions<RivetLanguageModelOptions>({
 			provider: 'rivet',
@@ -92,7 +92,7 @@ export class RivetChatLanguageModel implements LanguageModelV2 {
 			schema: rivetLanguageModelOptions,
 		})) ?? emptyOptions;
 
-		console.log(`options:${printObject(options)}`)
+		debugLog(`options:${printObject(options)}`)
 
     const {
       tools: rivetTools,
@@ -243,7 +243,7 @@ export class RivetChatLanguageModel implements LanguageModelV2 {
 	): Promise<Awaited<ReturnType<LanguageModelV2['doStream']>>> {
 		const { args, warnings } = await this.getArgs(options)
 		const body = args
-		console.log(`body:${printObject(body)}`)
+		debugLog(`body:${printObject(body)}`)
 
 		const headers = combineHeaders(this.config.headers(), options.headers)
 		let responseId = headers['X-Completion-Id'] ?? this.generateId()
@@ -610,7 +610,7 @@ function createRivetEventSourceResponseHandler(
   model: string | null
 ): ReturnType<typeof createEventSourceResponseHandler> {
   return createEventSourceResponseHandler(z.any().transform((data) => {
-		console.log(`SSE event received:${printObject(data)}`)
+		debugLog(`SSE event received:${printObject(data)}`)
     return mapRivetEventToOpenAIChunk(data, id, model)
   }))
 }
@@ -691,7 +691,7 @@ function mapRivetEventToOpenAIChunk(
       }
     default:
       // ignore unhandled events
-			console.log(`failling on default for type:${printObject(eventType)}`)
+			debugLog(`falling on default for type:${printObject(eventType)}`)
       return {
         id,
         created: Math.floor(Date.now() / 1000),
@@ -713,7 +713,7 @@ function mapRivetEventToOpenAIChunk(
 }
 
 const toOpenAIUsage = (usage?: RivetUsage) => {
-	console.log(`Usage to convert:${printObject(usage)}`)
+	debugLog(`Usage to convert:${printObject(usage)}`)
 
 	return usage
  		? {

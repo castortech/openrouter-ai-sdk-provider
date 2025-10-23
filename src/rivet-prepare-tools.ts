@@ -6,7 +6,7 @@ import {
 import type { RivetTool, RivetToolChoice } from './rivet-chat-prompt';
 import { parseProviderOptions } from '@ai-sdk/provider-utils';
 import { rivetToolOptions } from './rivet-chat-options';
-import { printObject } from './utils';
+import { debugLog, printObject } from './utils';
 
 export async function prepareTools({
   tools,
@@ -29,7 +29,7 @@ export async function prepareTools({
     return { tools: undefined, toolSchemas: undefined, toolChoice: undefined, toolWarnings };
   }
 
-	console.log(`\n\nprepare tools input:${printObject(tools)}`)
+	debugLog(`\n\nprepare tools input:${printObject(tools)}`)
 
   const rivetTools: Array<RivetTool> = [];
   const rivetSchemas: Array<RivetTool> = [];
@@ -62,7 +62,7 @@ export async function prepareTools({
     }
   }
 
-	console.log(`rivetSchemas:${printObject(rivetSchemas)}`)
+	debugLog(`rivetSchemas:${printObject(rivetSchemas)}`)
 
   if (toolChoice == null) {
     return { tools: rivetTools, toolSchemas: rivetSchemas, toolChoice: undefined, toolWarnings };
